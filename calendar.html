@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TimeSync | Calendar</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+    <style>
+        .calendar-page {
+            max-width: 1100px;
+            margin: 30px auto;
+            padding: 20px;
+            color: #40364d;
+        }
+
+        .calendar-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .calendar-top h1 {
+            margin: 0;
+            font-size: 28px;
+        }
+
+        .calendar-navigation {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin: 22px 0;
+        }
+
+        .calendar-navigation a {
+            display: inline-block;
+            padding: 10px 17px;
+            border-radius: 10px;
+            text-decoration: none;
+            color: #493b60;
+            background: #eee6ff;
+            font-weight: 600;
+        }
+
+        .calendar-navigation a:hover {
+            background: #dcd0ff;
+        }
+
+        .calendar-month-title {
+            text-align: center;
+            font-size: 27px;
+            margin: 20px 0;
+        }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, minmax(0, 1fr));
+            border-top: 1px solid #e7deef;
+            border-left: 1px solid #e7deef;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .weekday {
+            padding: 12px 4px;
+            text-align: center;
+            font-weight: bold;
+            background: #eee6ff;
+            border-right: 1px solid #e7deef;
+            border-bottom: 1px solid #e7deef;
+        }
+
+        .calendar-day {
+            min-height: 115px;
+            padding: 8px;
+            background: #fff;
+            border-right: 1px solid #e7deef;
+            border-bottom: 1px solid #e7deef;
+            overflow-wrap: anywhere;
+        }
+
+        .calendar-day.empty {
+            background: #faf8fc;
+        }
+
+        .day-number {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 28px;
+            height: 28px;
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+
+        .today-number {
+            background: #8d76d9;
+            color: white;
+            border-radius: 50%;
+        }
+
+        .task-chip {
+            display: block;
+            padding: 5px 7px;
+            margin-top: 5px;
+            border-radius: 6px;
+            font-size: 12px;
+            line-height: 1.35;
+            color: #40364d;
+        }
+
+        .task-color-0 { background: #ffe0e6; }
+        .task-color-1 { background: #dff4df; }
+        .task-color-2 { background: #dcecff; }
+        .task-color-3 { background: #fff0c9; }
+        .task-color-4 { background: #eadfff; }
+        .task-color-5 { background: #d7f5f1; }
+
+        .no-tasks {
+            color: #9b91a5;
+            font-size: 12px;
+        }
+
+        .calendar-links {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 22px;
+        }
+
+        .calendar-links a {
+            text-decoration: none;
+            color: #493b60;
+            background: #f1ebfa;
+            padding: 10px 16px;
+            border-radius: 9px;
+        }
+
+        @media (max-width: 650px) {
+            .calendar-page { padding: 8px; }
+            .calendar-day { min-height: 85px; padding: 4px; }
+            .weekday { font-size: 12px; padding: 8px 2px; }
+            .task-chip { font-size: 10px; padding: 4px; }
+            .calendar-month-title { font-size: 22px; }
+        }
+    </style>
+</head>
+
+<body>
+    <main class="calendar-page">
+        <div class="calendar-top">
+            <h1>🗓️ My Calendar</h1>
+            <span>Plan your time with TimeSync ✨</span>
+        </div>
+
+        <div class="calendar-navigation">
+            <a href="{{ url_for('calendar', year=prev_month.year, month=prev_month.month) }}">
+                ← Previous
+            </a>
+
+            <a href="{{ url_for('calendar') }}">Today</a>
+
+            <a href="{{ url_for('calendar', year=next_month.year, month=next_month.month) }}">
+                Next →
+            </a>
+        </div>
+
+        <h2 class="calendar-month-title">{{ month_name }} {{ year }}</h2>
+
+        <div class="calendar-grid">
+            {% for weekday in ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'] %}
+                <div class="weekday">{{ weekday }}</div>
+            {% endfor %}
+
+            {% for week in monthdays %}
+                {% for day in week %}
+                    {% if day == 0 %}
+                        <div class="calendar-day empty"></div>
+                    {% else %}
+                        <div class="calendar-day">
+                            <div class="day-number {% if year == today.year and month == today.month and day == today.day %}today-number{% endif %}">
+                                {{ day }}
+                            </div>
+
+                            {% for task in by_day.get(day, []) %}
+                                <div class="task-chip task-color-{{ loop.index0 % 6 }}">
+                                    {{ task.get('title', task.get('task', task.get('name', 'Task'))) }}
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            {% endfor %}
+        </div>
+
+        <div class="calendar-links">
+            <a href="{{ url_for('welcome') }}">🏠 Home</a>
+            <a href="{{ url_for('dashboard') }}">📋 Dashboard</a>
+            <a href="{{ url_for('settings') }}">⚙️ Settings</a>
+        </div>
+    </main>
+</body>
+</html>
+

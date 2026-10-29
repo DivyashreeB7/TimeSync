@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TimeSync | Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+    
+<header class="topbar">
+    <a class="brand" href="/">✦ TimeSync</a>
+    <nav>
+        <a href="{{ url_for('welcome') }}">🏠 Home</a>
+        <a href="/dashboard">My Dashboard</a>
+        <a href="/calendar">Calendar</a>
+        <a href="/timer">Study Timer</a>
+        <a href="{{ url_for('settings') }}">⚙️ Settings</a>
+        <span class="welcome-user">Hi, {{ session["username"] }}!</span>
+        <form action="/logout" method="POST">
+            <button class="logout-btn" type="submit">Log out</button>
+        </form>
+    </nav>
+</header>
+
+
+    <main class="container">
+        <section class="welcome">
+            <p class="eyebrow">YOUR PERSONAL PLANNER</p>
+            <h1>Plan your day. Stay on track.</h1>
+            <p>Small steps every day lead to big achievements.</p>
+        </section>
+
+        <section class="stats">
+            <article class="stat-card">
+                <span>Total tasks</span>
+                <strong>{{ total_tasks }}</strong>
+            </article>
+            <article class="stat-card">
+                <span>Pending</span>
+                <strong>{{ pending_tasks }}</strong>
+            </article>
+            <article class="stat-card">
+                <span>Completed</span>
+                <strong>{{ completed_tasks }}</strong>
+            </article>
+        </section>
+
+        <section class="panel progress-panel">
+            <div class="section-heading">
+                <div>
+                    <h2>Your progress</h2>
+                    <p>Keep moving towards your goals.</p>
+                </div>
+                <strong>{{ progress }}%</strong>
+            </div>
+            <div class="progress-track">
+                
+          <div class="progress-fill" data-progress="{{ progress }}"></div>
+
+            </div>
+        </section>
+
+        <section class="panel">
+            <h2>Add a task</h2>
+            <form action="/add-task" method="POST" class="task-form">
+                <input name="title" placeholder="What do you need to do?" maxlength="150" required>
+                <input name="subject" placeholder="Subject or category" maxlength="100">
+
+                <label>
+                    Due date
+                    <input type="date" name="due_date">
+                </label>
+
+                <label>
+                    Priority
+                    <select name="priority">
+                        <option>Low</option>
+                        <option selected>Medium</option>
+                        <option>High</option>
+                    </select>
+                </label>
+
+                <button type="submit">+ Add task</button>
+            </form>
+        </section>
+
+        <section class="panel">
+            <div class="section-heading">
+                <div>
+                    <h2>Your tasks</h2>
+                    <p>Manage your tasks and track completion.</p>
+                </div>
+                <span class="task-count">{{ total_tasks }} tasks</span>
+            </div>
+
+            {% if tasks %}
+            <div class="task-list">
+                {% for task in tasks %}
+                <article class="task-item">
+                    <div class="task-main">
+                        <a href="{{ url_for('edit_task', task_id=task.id) }}">✏️ Edit</a>
+                        <form action="/toggle-task/{{ task.id }}" method="POST">
+                            <button class="check-button" type="submit" title="Toggle completion">
+                                {{ "✓" if task.completed else "○" }}
+                            </button>
+                        </form>
+
+                        <div class="task-text">
+                            <h3 class="{{ 'done' if task.completed else '' }}">{{ task.title }}</h3>
+                            <p>
+                                {{ task.subject or "General" }}
+                                {% if task.due_date %}
+                                · Due {{ task.due_date }}
+                                {% endif %}
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="task-actions">
+                        <span class="priority priority-{{ task.priority|lower }}">
+                            {{ task.priority }}
+                        </span>
+                        <form action="/delete-task/{{ task.id }}" method="POST">
+                            <button class="delete-button" type="submit">Delete</button>
+                        </form>
+                    </div>
+                </article>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="empty-state">
+                <span>✓</span>
+                <h3>Your task list starts here</h3>
+                <p>Add your first task using the form above.</p>
+            </div>
+            {% endif %}
+        </section>
+
+        <section class="panel">
+            <h2>Due today</h2>
+            {% if today_tasks %}
+            {% for task in today_tasks %}
+            <p>• {{ task.title }}</p>
+            {% endfor %}
+            {% else %}
+            <p class="muted">No pending tasks due today.</p>
+            {% endif %}
+        </section>
+
+        <footer>TimeSync · Organize your time, achieve your goals.</footer>
+    </main>
+    <script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
+
+</html>

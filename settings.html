@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Settings | TimeSync</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        .settings-page { max-width: 700px; margin: 35px auto; padding: 20px; }
+        .settings-card { background: #fff9f5; padding: 20px; margin: 16px 0; border-radius: 18px; }
+        .settings-btn { display: inline-block; padding: 10px 15px; margin: 4px; border-radius: 10px; background: #eee8ff; color: #35264d; text-decoration: none; }
+        .settings-card p { overflow-wrap: anywhere; }
+    </style>
+</head>
+<body>
+    <main class="settings-page">
+        <h1>⚙️ TimeSync Settings</h1>
+
+        <nav>
+            <a class="settings-btn" href="{{ url_for('welcome') }}">🏠 Home</a>
+            <a class="settings-btn" href="{{ url_for('dashboard') }}">📋 Dashboard</a>
+            <a class="settings-btn" href="{{ url_for('calendar') }}">📅 Calendar</a>
+            <a class="settings-btn" href="{{ url_for('logout') }}">Log out</a>
+        </nav>
+
+        <section class="settings-card">
+            <h2>👤 Account Information</h2>
+            <p><strong>Name:</strong> {{ user.get('name', user.get('username', 'Not provided')) }}</p>
+            <p><strong>Email:</strong> {{ user.get('email', 'Not provided') }}</p>
+            <p><strong>User ID:</strong> {{ user.get('_id', 'Not available') }}</p>
+            <p><strong>Email verified:</strong> {{ 'Yes' if user.get('email_verified') else 'No' }}</p>
+        </section>
+
+        <section class="settings-card">
+            <h2>🔐 Security</h2>
+            <p>Use a strong, unique password to protect your account.</p>
+        </section>
+
+    </main>
+</body>
+</html>

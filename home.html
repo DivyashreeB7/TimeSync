@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>TimeSync | Plan Your Life</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body class="landing-body">
+    <header class="topbar">
+        <a class="brand" href="/">✦ TimeSync</a>
+        <nav>
+            <a href="#features">Features</a>
+            <a href="#how-it-works">How it works</a>
+            <a class="nav-login" href="/login">Login</a>
+            <a class="nav-cta" href="/signup">Get Started</a>
+        </nav>
+    </header>
+
+    <main class="landing-container">
+        <section class="hero">
+            <div class="hero-copy">
+                <span class="hero-label">✦ YOUR TIME, YOUR WAY</span>
+                <h1>Make time for what <span>matters.</span></h1>
+                <p>
+                    Your personal space to plan your day, organise tasks,
+                    set reminders and build better study habits.
+                    One little step at a time.
+                </p>
+                <div class="hero-actions">
+                    <a class="primary-btn" href="/signup">Create your free account →</a>
+                    <a class="secondary-btn" href="/login">I already have an account</a>
+                </div>
+                <div class="trust-note">🔒 Your own account. Your own workspace.</div>
+            </div>
+
+            <div class="hero-art">
+                <div class="floating-card purple-card">
+                    <span>✨ Today's focus</span>
+                    <h3>Make it count!</h3>
+                    <p>Small progress is still progress.</p>
+                </div>
+                <div class="floating-card peach-card">
+                    <span>📚 Study session</span>
+                    <h3>One task at a time</h3>
+                    <p>Focus · Finish · Feel good</p>
+                </div>
+                <div class="hero-orb">⏰</div>
+            </div>
+        </section>
+
+        <section id="features" class="features-section">
+            <span class="hero-label">MADE FOR YOUR EVERYDAY LIFE</span>
+            <h2>Everything in one happy place.</h2>
+            <p class="section-intro">Less confusion. More clarity. A little more time for you.</p>
+
+            <div class="feature-grid">
+                <article class="feature-card feature-lavender">
+                    <span class="feature-icon">📝</span>
+                    <h3>Smart task planning</h3>
+                    <p>Add tasks, organise by subject, set deadlines and choose priorities.</p>
+                </article>
+                <article class="feature-card feature-peach">
+                    <span class="feature-icon">🔔</span>
+                    <h3>Reminders</h3>
+                    <p>Keep important tasks on your radar so fewer things slip through.</p>
+                </article>
+                <article class="feature-card feature-mint">
+                    <span class="feature-icon">📅</span>
+                    <h3>Your schedule</h3>
+                    <p>Work towards a more organised day with a personal calendar.</p>
+                </article>
+                <article class="feature-card feature-yellow">
+                    <span class="feature-icon">⏱️</span>
+                    <h3>Focus and progress</h3>
+                    <p>Use study sessions and progress statistics to stay motivated.</p>
+                </article>
+            </div>
+        </section>
+
+        <section id="how-it-works" class="how-section">
+            <span class="hero-label">SIMPLE TO START</span>
+            <h2>Three steps to a more organised day.</h2>
+            <div class="steps-grid">
+                <article><span>01</span><h3>Create your account</h3><p>Sign up with your name, email and password.</p></article>
+                <article><span>02</span><h3>Make it your own</h3><p>Add your tasks, subjects and deadlines.</p></article>
+                <article><span>03</span><h3>Track your progress</h3><p>Complete tasks and see how far you've come.</p></article>
+            </div>
+            <a class="primary-btn" href="/signup">Let's get started →</a>
+        </section>
+    </main>
+
+    <footer class="site-footer">✦ TimeSync · Your plans, your pace, your progress.</footer>
+    <p>🌍 TimeSync visits: {{ visitor_count }}</p>
+</body>
+</html>

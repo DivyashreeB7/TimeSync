@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Login | TimeSync</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body class="auth-body">
+    <a class="auth-brand" href="/">✦ TimeSync</a>
+    <main class="auth-card">
+        <div class="auth-emoji">🌷</div>
+        <span class="hero-label">WELCOME BACK</span>
+        <h1>Let's pick up where you left off.</h1>
+        <p class="auth-description">Your plans are waiting for you.</p>
+
+        {% for category, message in get_flashed_messages(with_categories=true) %}
+            <div class="message {{ category }}">{{ message }}</div>
+        {% endfor %}
+
+        <form method="POST" class="auth-form">
+            <label>Email address
+                <input type="email" name="email" placeholder="you@example.com" required>
+            </label>
+            <label>Password
+                
+
+<div class="password-field">
+    <input
+        type="password"
+        id="login_password"
+        name="password"
+        autocomplete="current-password"
+        required
+    >
+    <button
+        type="button"
+        class="toggle-password"
+        onclick="togglePassword('login_password', this)"
+    >Show</button>
+</div>
+
+<script>
+function togglePassword(id, button) {
+    const field = document.getElementById(id);
+    if (!field) return;
+
+    if (field.type === "password") {
+        field.type = "text";
+        button.textContent = "Hide";
+        button.setAttribute("aria-label", "Hide password");
+    } else {
+        field.type = "password";
+        button.textContent = "Show";
+        button.setAttribute("aria-label", "Show password");
+    }
+}
+</script>
+
+            </label>
+            <button class="primary-btn auth-submit" type="submit">Log in to TimeSync →</button>
+        </form>
+        <p class="auth-switch">New to TimeSync? <a href="/signup">Create an account</a></p>
+        <a class="back-link" href="/">← Back to home</a>
+    </main>
+</body>
+</html>

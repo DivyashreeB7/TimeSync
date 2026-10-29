@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Study Timer | TimeSync</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <style>
+    body { font-family: Arial, sans-serif; background: #f6f0ff; text-align: center; padding: 25px; }
+    .timer-card { max-width: 480px; margin: 55px auto; padding: 35px;
+      background: white; border-radius: 24px; box-shadow: 0 8px 30px #44336618; }
+    #clock { font-size: clamp(55px, 12vw, 80px); font-weight: bold; color: #8061c4; margin: 25px 0; }
+    button { border: 0; padding: 12px 20px; margin: 5px; border-radius: 10px;
+      cursor: pointer; background: #8061c4; color: white; }
+    select { padding: 10px; border-radius: 8px; }
+    a { color: #6b4db0; }
+  </style>
+</head>
+<body>
+  <p><a href="{{ url_for('dashboard') }}">← Dashboard</a></p>
+  <main class="timer-card">
+    <h1>⏱️ Study Timer</h1>
+    <p>Focus on one task at a time.</p>
+    <label for="minutes">Session length:</label>
+    <select id="minutes">
+      <option value="25">25 minutes — Pomodoro</option>
+      <option value="15">15 minutes</option>
+      <option value="45">45 minutes</option>
+      <option value="20">20 minutes</option>
+      <option value="10">10 minutes</option>
+      <option value="5">5 minutes — Short break</option>
+    </select>
+    <div id="clock" role="timer" aria-live="off">25:00</div>
+    <p id="status" aria-live="polite">Ready to focus?</p>
+    <button id="start">Start</button>
+    <button id="pause">Pause</button>
+    <button id="reset">Reset</button>
+  </main>
+  <script>
+    const picker = document.getElementById("minutes");
+    const clock = document.getElementById("clock");
+    const statusText = document.getElementById("status");
+    let remaining = 25 * 60;
+    let endAt = null;
+    let interval = null;
+
+    function display() {
+      const m = Math.floor(remaining / 60);
+      const s = remaining % 60;
+      clock.textContent = String(m).padStart(2, "0") + ":" + String(s).padStart(2, "0");
+    }
+
+    function stop() {
+      clearInterval(interval);
+      interval = null;
+      endAt = null;
+    }
+
+    function tick() {
+      remaining = Math.max(0, Math.ceil((endAt - Date.now()) / 1000));
+      display();
+      if (remaining <= 0) {
+        stop();
+        statusText.textContent = "Session complete! Great work 🎉";
+      }
+    }
+
+    document.getElementById("start").addEventListener("click", () => {
+      if (interval) return;
+      if (remaining <= 0) remaining = Number(picker.value) * 60;
+      endAt = Date.now() + remaining * 1000;
+      statusText.textContent = "Focus session in progress…";
+      interval = setInterval(tick, 250);
+      tick();
+    });
+
+    document.getElementById("pause").addEventListener("click", () => {
+      if (!interval) return;
+      tick();
+      stop();
+      statusText.textContent = "Paused";
+    });
+
+    document.getElementById("reset").addEventListener("click", () => {
+      stop();
+      remaining = Number(picker.value) * 60;
+      display();
+      statusText.textContent = "Timer reset";
+    });
+
+    picker.addEventListener("change", () => {
+      stop();
+      remaining = Number(picker.value) * 60;
+      display();
+      statusText.textContent = "Ready to focus?";
+    });
+
+    display();
+  </script>
+</body>
+</html>

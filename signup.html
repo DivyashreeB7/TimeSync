@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Join TimeSync</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body class="auth-body">
+    <a class="auth-brand" href="/">✦ TimeSync</a>
+    <main class="auth-card">
+        <div class="auth-emoji">🌈</div>
+        <span class="hero-label">YOUR JOURNEY STARTS HERE</span>
+        <h1>Create your account</h1>
+        <p class="auth-description">Make a little space for your goals.</p>
+
+        {% for category, message in get_flashed_messages(with_categories=true) %}
+            <div class="message {{ category }}">{{ message }}</div>
+        {% endfor %}
+
+        <div style="display:flex; gap:8px; align-items:center;">
+    
+
+</div>
+
+        <form method="POST" class="auth-form">
+            <label>Username
+                <input name="username" maxlength="40" placeholder="Choose a username" required>
+            </label>
+            <label>Email address
+                <input type="email" name="email" maxlength="120" placeholder="you@example.com" required>
+            </label>
+            <label>Password
+                <input type="password" id="signup_password" name="password" autocomplete="new-password" required  style="flex:1" minlength="8" placeholder="At least 8 characters" required>
+                  <button type="button" onclick="togglePassword('signup_password', this)"> Show  </button>
+
+            <button class="primary-btn auth-submit" type="submit">Create my account →</button>
+
+    </label>
+    
+
+        </form>
+        <p class="auth-switch">Already a member? <a href="/login">Log in</a></p>
+        <a class="back-link" href="/">← Back to home</a>
+    </main>
+</body>
+</html>
