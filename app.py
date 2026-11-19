@@ -29,7 +29,7 @@ if not mongo_uri:
         "Set MONGODB_URI to your MongoDB Atlas connection string."  )
 
 client = MongoClient(mongo_uri, serverSelectionTimeoutMS=10000)
-db = client["timesync"]
+db = client["TimeSync"]
 
 users = db["users"]
 tasks = db["tasks"]
