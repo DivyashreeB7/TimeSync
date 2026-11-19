@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Edit Task | TimeSync</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <style>
+    body { font-family: Arial, sans-serif; background: #f6f0ff; padding: 24px; }
+    .form-card { max-width: 520px; margin: 35px auto; background: white;
+      padding: 28px; border-radius: 20px; box-shadow: 0 8px 30px #44336618; }
+    input, select { width: 100%; box-sizing: border-box; padding: 12px;
+      margin: 8px 0 18px; border: 1px solid #ddd2ee; border-radius: 10px; }
+    button, .back { background: #8164c8; color: white; border: 0;
+      border-radius: 10px; padding: 12px 18px; cursor: pointer; text-decoration: none; }
+    label { font-weight: bold; }
+  </style>
+</head>
+<body>
+  <main class="form-card">
+    <h1>✏️ Edit your task</h1>
+    <form method="POST">
+      <label>Task title</label>
+      <input name="title" maxlength="150" value="{{ task.title }}" required>
+
+      <label>Subject</label>
+      <input name="subject" maxlength="100" value="{{ task.subject }}">
+
+      <label>Due date</label>
+      <input type="date" name="due_date" value="{{ task.due_date }}">
+
+      <label>Priority</label>
+      <select name="priority">
+        <option value="Low" {% if task.priority == 'Low' %}selected{% endif %}>Low</option>
+        <option value="Medium" {% if task.priority == 'Medium' %}selected{% endif %}>Medium</option>
+        <option value="High" {% if task.priority == 'High' %}selected{% endif %}>High</option>
+      </select>
+
+      <button type="submit">Save Changes</button>
+      <a class="back" href="{{ url_for('dashboard') }}">Cancel</a>
+    </form>
+  </main>
+</body>
+</html>
