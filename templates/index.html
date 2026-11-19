@@ -380,7 +380,7 @@
 
                     <h3>📅 Upcoming</h3>
                     {% set ns2 = namespace(found=false) %}
-                    {% for task in tasks if not task.completed and task.due_date and task.due_date > today %}
+                   {% for task in tasks if not task.completed and task.due_date and task.due_date > (today | default('')) %}
                     {% set ns2.found = true %}
                     <div class="task">
                         <form method="POST" action="{{ url_for('toggle_task', task_id=task.id) }}">
