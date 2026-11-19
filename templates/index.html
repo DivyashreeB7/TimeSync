@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TimeSync | Dashboard</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: #f7f6fc;
+            color: #302d3d;
+        }
+
+        nav {
+            background: white;
+            padding: 17px 6%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 12px #2920440d;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .logo {
+            font-size: 25px;
+            font-weight: 800;
+            color: #8063c9;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: #625d70;
+            margin-left: 22px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        nav a:hover {
+            color: #8063c9;
+        }
+
+        .container {
+            max-width: 1150px;
+            margin: 35px auto;
+            padding: 0 20px;
+        }
+
+        .welcome {
+            background: linear-gradient(120deg, #e9e1ff, #fce8f2);
+            border-radius: 22px;
+            padding: 30px;
+            margin-bottom: 25px;
+        }
+
+        .welcome h1 {
+            margin: 0 0 8px;
+            font-size: 29px;
+        }
+
+        .welcome p {
+            margin: 0;
+            color: #6d657b;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            margin-bottom: 28px;
+        }
+
+        .stat {
+            background: white;
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 3px 15px #30204408;
+        }
+
+        .stat small {
+            color: #898397;
+        }
+
+        .stat h2 {
+            margin: 9px 0 0;
+            font-size: 27px;
+        }
+
+        .layout {
+            display: grid;
+            grid-template-columns: 1fr 320px;
+            gap: 22px;
+            align-items: start;
+        }
+
+        .panel {
+            background: white;
+            border-radius: 18px;
+            padding: 23px;
+            margin-bottom: 20px;
+            box-shadow: 0 3px 15px #30204408;
+        }
+
+        .panel h2 {
+            font-size: 20px;
+            margin: 0 0 18px;
+        }
+
+        .task {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 15px 0;
+            border-bottom: 1px solid #f0edf5;
+        }
+
+        .task:last-child {
+            border-bottom: 0;
+        }
+
+        .task input[type=checkbox] {
+            width: 18px;
+            height: 18px;
+            accent-color: #8b70d1;
+            cursor: pointer;
+        }
+
+        .task-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .task-info strong {
+            display: block;
+            font-size: 14px;
+        }
+
+        .task-info small {
+            color: #898397;
+            display: block;
+            margin-top: 5px;
+        }
+
+        .done strong {
+            text-decoration: line-through;
+            color: #999;
+        }
+
+        .status {
+            display: inline-block;
+            font-size: 11px;
+            border-radius: 20px;
+            padding: 5px 9px;
+            margin-top: 5px;
+        }
+
+        .pending {
+            background: #eee9ff;
+            color: #7456bb;
+        }
+
+        .completed {
+            background: #e0f5e8;
+            color: #27834b;
+        }
+
+        .overdue {
+            background: #ffe7e7;
+            color: #c04d4d;
+        }
+
+        .actions {
+            display: flex;
+            gap: 7px;
+        }
+
+        .actions a {
+            text-decoration: none;
+            font-size: 12px;
+            padding: 7px 9px;
+            border-radius: 7px;
+            background: #f1edfa;
+            color: #7055b5;
+        }
+
+        .actions button {
+            border: 0;
+            cursor: pointer;
+            font-size: 12px;
+            padding: 7px 9px;
+            border-radius: 7px;
+            background: #fff0f0;
+            color: #c05252;
+        }
+
+        form.add-form {
+            display: grid;
+            gap: 12px;
+        }
+
+        input,
+        select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #e5e0ed;
+            border-radius: 9px;
+            font-size: 14px;
+            background: #fff;
+        }
+
+        .add-btn {
+            border: 0;
+            border-radius: 10px;
+            padding: 13px;
+            background: #8063c9;
+            color: white;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .add-btn:hover {
+            background: #6c50b2;
+        }
+
+        .progress {
+            height: 9px;
+            background: #eeeaf5;
+            border-radius: 20px;
+            overflow: hidden;
+        }
+
+        .progress div {
+            height: 100%;
+            background: #8c72d1;
+            border-radius: 20px;
+        }
+
+        .flash {
+            padding: 12px;
+            border-radius: 9px;
+            background: #f0eaff;
+            margin-bottom: 12px;
+            color: #6248a5;
+        }
+
+        .empty {
+            color: #9993a6;
+            font-size: 14px;
+            padding: 10px 0;
+        }
+
+        footer {
+            text-align: center;
+            color: #999;
+            padding: 30px;
+            font-size: 13px;
+        }
+
+        @media(max-width:800px) {
+            .layout {
+                grid-template-columns: 1fr;
+            }
+
+            .stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            nav {
+                align-items: flex-start;
+                gap: 12px;
+                flex-direction: column;
+            }
+
+            nav a {
+                margin: 0 12px 0 0;
+                display: inline-block;
+            }
+
+            .task {
+                flex-wrap: wrap;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav>
+        <div class="logo">TimeSync ✦</div>
+        <div>
+            <a href="{{ url_for('welcome') }}">Home</a>
+            <a href="{{ url_for('dashboard') }}">Dashboard</a>
+            <a href="{{ url_for('calendar') }}">Calendar</a>
+            <a href="{{ url_for('timer') }}">Study Timer</a>
+            <a href="{{ url_for('settings') }}">Settings</a>
+            <a href="{{ url_for('logout') }}">Logout</a>
+        </div>
+    </nav>
+
+    <div class="container">
+
+        <div class="welcome">
+            <h1>Welcome back, {{ session.get('username', 'there') }}! 🌷</h1>
+            <p>Plan your day, manage your tasks and make every moment count.</p>
+        </div>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% for category, message in messages %}
+        <div class="flash">{{ message }}</div>
+        {% endfor %}
+        {% endwith %}
+
+        <div class="stats">
+            <div class="stat"><small>Total Tasks</small>
+                <h2>{{ total_tasks }}</h2>
+            </div>
+            <div class="stat"><small>Completed</small>
+                <h2>{{ completed_tasks }}</h2>
+            </div>
+            <div class="stat"><small>Pending</small>
+                <h2>{{ pending_tasks }}</h2>
+            </div>
+            <div class="stat"><small>Progress</small>
+                <h2>{{ progress }}%</h2>
+            </div>
+        </div>
+
+        <div class="panel">
+            <h2>Your Overall Progress</h2>
+            <div class="progress">
+                <div class="progress-fill" data-progress="{{ progress }}"></div>
+            </div>
+            <p style="color:#888;font-size:13px">{{ completed_tasks }} out of {{ total_tasks }} tasks completed.</p>
+        </div>
+
+        <div class="layout">
+
+            <main>
+
+                <div class="panel">
+                    <h2>My Tasks ✨</h2>
+
+                    {% set ns = namespace(found=false) %}
+                    {% for task in tasks if not task.completed and task.due_date == today %}
+                    {% if not ns.found %}
+                    <h3>☀️ Today</h3>
+                    {% set ns.found = true %}
+                    {% endif %}
+                    <div class="task">
+                        <form method="POST" action="{{ url_for('toggle_task', task_id=task.id) }}">
+                            <input type="checkbox" onchange="this.form.submit()">
+                        </form>
+                        <div class="task-info">
+                            <strong>{{ task.title }}</strong>
+                            <small>{{ task.subject or 'Personal task' }} · Due {{ task.due_date }}</small>
+                            <span class="status pending">Pending</span>
+                        </div>
+                        <div class="actions">
+                            <a href="{{ url_for('edit_task', task_id=task.id) }}">Edit</a>
+                            <form method="POST" action="{{ url_for('delete_task', task_id=task.id) }}"
+                                onsubmit="return confirm('Delete this task?')">
+                                <button type="submit">Delete</button>
+                            </form>
+                        </div>
+                    </div>
+                    {% endfor %}
+                    {% if not ns.found %}
+                    <p class="empty">No tasks due today. Enjoy your free time! 🌼</p>
+                    {% endif %}
+
+                    <hr style="border:0;border-top:1px solid #eee;margin:18px 0">
+
+                    <h3>📅 Upcoming</h3>
+                    {% set ns2 = namespace(found=false) %}
+                    {% for task in tasks if not task.completed and task.due_date and task.due_date > today %}
+                    {% set ns2.found = true %}
+                    <div class="task">
+                        <form method="POST" action="{{ url_for('toggle_task', task_id=task.id) }}">
+                            <input type="checkbox" onchange="this.form.submit()">
+                        </form>
+                        <div class="task-info">
+                            <strong>{{ task.title }}</strong>
+                            <small>{{ task.subject or 'Personal task' }} · Due {{ task.due_date }}</small>
+                            <span class="status pending">{{ task.priority }} priority</span>
+                        </div>
+                        <div class="actions">
+                            <a href="{{ url_for('edit_task', task_id=task.id) }}">Edit</a>
+                            <form method="POST" action="{{ url_for('delete_task', task_id=task.id) }}"
+                                onsubmit="return confirm('Delete this task?')">
+                                <button type="submit">Delete</button>
+                            </form>
+                        </div>
+                    </div>
+                    {% endfor %}
+                    {% if not ns2.found %}
+                    <p class="empty">No upcoming tasks.</p>
+                    {% endif %}
+
+                    <hr style="border:0;border-top:1px solid #eee;margin:18px 0">
+
+                    <h3>⚠️ Overdue</h3>
+                    {% set ns3 = namespace(found=false) %}
+                    {% for task in tasks if not task.completed and task.due_date and task.due_date < today %} {% set
+                        ns3.found=true %} <div class="task">
+                        <form method="POST" action="{{ url_for('toggle_task', task_id=task.id) }}">
+                            <input type="checkbox" onchange="this.form.submit()">
+                        </form>
+                        <div class="task-info">
+                            <strong>{{ task.title }}</strong>
+                            <small>{{ task.subject or 'Personal task' }} · Due {{ task.due_date }}</small>
+                            <span class="status overdue">Overdue</span>
+                        </div>
+                        <div class="actions">
+                            <a href="{{ url_for('edit_task', task_id=task.id) }}">Edit</a>
+                            <form method="POST" action="{{ url_for('delete_task', task_id=task.id) }}"
+                                onsubmit="return confirm('Delete this task?')">
+                                <button type="submit">Delete</button>
+                            </form>
+                        </div>
+                </div>
+                {% endfor %}
+                {% if not ns3.found %}
+                <p class="empty">No overdue tasks. Great work! 🎉</p>
+                {% endif %}
+
+                <hr style="border:0;border-top:1px solid #eee;margin:18px 0">
+
+                <h3>✓ Completed</h3>
+                {% set ns4 = namespace(found=false) %}
+                {% for task in tasks if task.completed %}
+                {% set ns4.found = true %}
+                <div class="task done">
+                    <form method="POST" action="{{ url_for('toggle_task', task_id=task.id) }}">
+                        <input type="checkbox" checked onchange="this.form.submit()">
+                    </form>
+                    <div class="task-info">
+                        <strong>{{ task.title }}</strong>
+                        <small>{{ task.subject or 'Personal task' }} · {{ task.due_date or 'No deadline' }}</small>
+                        <span class="status completed">✓ Completed</span>
+                    </div>
+                    <div class="actions">
+                        <a href="{{ url_for('edit_task', task_id=task.id) }}">Edit</a>
+                        <form method="POST" action="{{ url_for('delete_task', task_id=task.id) }}"
+                            onsubmit="return confirm('Delete this task?')">
+                            <button type="submit">Delete</button>
+                        </form>
+                    </div>
+                </div>
+                {% endfor %}
+                {% if not ns4.found %}
+                <p class="empty">Completed tasks will appear here.</p>
+                {% endif %}
+
+        </div>
+        </main>
+
+        <aside>
+            <div class="panel">
+                <h2>＋ Add a Task</h2>
+                <form class="add-form" method="POST" action="{{ url_for('add_task') }}">
+                    <label>Task title</label>
+                    <input type="text" name="title" placeholder="What do you need to do?" maxlength="150" required>
+
+                    <label>Subject / Category</label>
+                    <input type="text" name="subject" placeholder="e.g. Study, Personal, Work">
+
+                    <label>Due date</label>
+                    <input type="date" name="due_date" min="2000-01-01">
+
+                    <label>Priority</label>
+                    <select name="priority">
+                        <option>Low</option>
+                        <option selected>Medium</option>
+                        <option>High</option>
+                    </select>
+
+                    <button class="add-btn" type="submit">＋ Add Task</button>
+                </form>
+            </div>
+
+            <div class="panel">
+                <h2>Quick Links</h2>
+                <p><a href="{{ url_for('calendar') }}">📅 View Calendar</a></p>
+                <p><a href="{{ url_for('timer') }}">⏱ Start Study Timer</a></p>
+                <p><a href="{{ url_for('settings') }}">⚙ Account Settings</a></p>
+            </div>
+        </aside>
+
+    </div>
+    </div>
+    <script>
+        document.querySelectorAll(".progress-fill").forEach(function (bar) {
+            let value = Number(bar.dataset.progress);
+            value = Math.max(0, Math.min(100, value));
+            bar.style.width = value + "%";
+        });
+    </script>
+
+    <footer>Made with ♡ using TimeSync · Plan better, live better.</footer>
+
+</body>
+
+</html>
