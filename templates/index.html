@@ -380,7 +380,7 @@
 
                     <h3>📅 Upcoming</h3>
                     {% set ns2 = namespace(found=false) %}
-                   {% for task in tasks if not task.completed and task.due_date and task.due_date > (today | default('')) %}
+                    {% for task in tasks if not task.completed and task.due_date and task.due_date > (today | default('')) %}
                     {% set ns2.found = true %}
                     <div class="task">
                         <form method="POST" action="{{ url_for('toggle_task', task_id=task.id) }}">
@@ -408,8 +408,8 @@
 
                     <h3>⚠️ Overdue</h3>
                     {% set ns3 = namespace(found=false) %}
-                    {% for task in tasks if not task.completed and task.due_date and task.due_date < today %} {% set
-                        ns3.found=true %} <div class="task">
+                    {% for task in tasks if not task.completed and task.due_date and task.due_date < (today | default('9999-12-31')) %}
+                    {% set ns3.found=true %} <div class="task">
                         <form method="POST" action="{{ url_for('toggle_task', task_id=task.id) }}">
                             <input type="checkbox" onchange="this.form.submit()">
                         </form>
