@@ -1,0 +1,16 @@
+﻿.env
+.env.*
+!.env.example
+*.pem
+*.key
+secrets.*
+config.local.*
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+env/
+instance/
+.DS_Store
+Thumbs.db
+.vscode/
